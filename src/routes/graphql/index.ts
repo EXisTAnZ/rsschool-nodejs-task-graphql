@@ -8,6 +8,8 @@ import { getUser, getUsers } from './resolvers/user-resolver.js';
 import { getMemberType, getMemberTypes } from './resolvers/member-type-resolver.js';
 import { PostType } from './types/post.js';
 import { getPost, getPosts } from './resolvers/post-resolver.js';
+import { ProfileType } from './types/porfile.js';
+import { getProfile, getProfiles } from './resolvers/profile-resolver.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.route({
@@ -28,6 +30,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         memberTypes: getMemberTypes,
         post: getPost,
         posts: getPosts,
+        profile: getProfile,
+        profiles: getProfiles,
       };
       const query = new GraphQLObjectType({
         name: "Query",
@@ -58,6 +62,15 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           },
           posts: {
             type: new GraphQLList(PostType),
+          },
+          profile: {
+            type: ProfileType,
+            args: {
+              id: { type: new GraphQLNonNull(UUIDType) },
+            },
+          },
+          profiles: {
+            type: new GraphQLList(ProfileType),
           },
         },
       });
