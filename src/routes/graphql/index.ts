@@ -5,6 +5,7 @@ import { UUIDType } from './types/uuid.js';
 import { UserType } from './types/user.js';
 import { MemberTypesType } from './types/member-type.js';
 import { getUser, getUsers } from './resolvers/user-resolver.js';
+import { getMemberType, getMemberTypes } from './resolvers/member-type-resolver.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.route({
@@ -21,6 +22,8 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       const resolvers = {
         user: getUser,
         users: getUsers,
+        memberType: getMemberType,
+        memberTypes: getMemberTypes,
       };
       const query = new GraphQLObjectType({
         name: "Query",
