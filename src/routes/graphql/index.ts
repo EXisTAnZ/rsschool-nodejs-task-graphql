@@ -1,9 +1,10 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, graphql } from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString, graphql } from 'graphql';
 import { UUIDType } from './types/uuid.js';
 import { UserType } from './types/user.js';
-// START
+import { MemberTypesType } from './types/member-type.js';
+
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.route({
     url: '/',
@@ -26,6 +27,15 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           },
           users: {
             type: new GraphQLList(UserType),
+          },
+          memberType: {
+            type: MemberTypesType,
+            args: {
+              id: { type: new GraphQLNonNull(GraphQLString) },
+            },
+          },
+          memberTypes: {
+            type: new GraphQLList(MemberTypesType),
           },
         },
       });
