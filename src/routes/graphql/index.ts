@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString, graphql } from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString, graphql, parse, validate } from 'graphql';
 import { UUIDType } from './types/uuid.js';
 import { UserType } from './types/user.js';
 import { MemberTypesType } from './types/member-type.js';
@@ -22,6 +22,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       },
     },
     async handler(req) {
+
       const { prisma } = fastify;
       const resolvers = {
         user: getUser,
@@ -75,6 +76,11 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         },
       });
       const schema = new GraphQLSchema({ query });
+      const errors = validate(schema, parse(req.body.query));
+
+      if (errors.length > 0) {
+        return { errors };
+      };
       const res = await graphql({
         schema,
         variableValues: req.body.variables,
