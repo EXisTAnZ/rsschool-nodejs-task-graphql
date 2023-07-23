@@ -4,12 +4,9 @@ import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLS
 import { UUIDType } from './types/uuid.js';
 import { UserType } from './types/user.js';
 import { MemberTypesType } from './types/member-type.js';
-import { getUser, getUsers } from './resolvers/user-resolver.js';
-import { getMemberType, getMemberTypes } from './resolvers/member-type-resolver.js';
 import { PostType } from './types/post.js';
-import { getPost, getPosts } from './resolvers/post-resolver.js';
 import { ProfileType } from './types/porfile.js';
-import { getProfile, getProfiles } from './resolvers/profile-resolver.js';
+import { resolvers } from './resolvers/index.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.route({
@@ -24,16 +21,6 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
     async handler(req) {
 
       const { prisma } = fastify;
-      const resolvers = {
-        user: getUser,
-        users: getUsers,
-        memberType: getMemberType,
-        memberTypes: getMemberTypes,
-        post: getPost,
-        posts: getPosts,
-        profile: getProfile,
-        profiles: getProfiles,
-      };
       const query = new GraphQLObjectType({
         name: "Query",
         fields: {
