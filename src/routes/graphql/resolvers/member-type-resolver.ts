@@ -7,17 +7,19 @@ export async function getMemberTypes(args, context: { prisma: PrismaClient } ) {
 }
 
 export async function getMemberType(args: {memberTypeId: MemberTypeId},  context: { prisma: PrismaClient } ) {
+  const id = args.memberTypeId ? args.memberTypeId : MemberTypeId.BASIC;
   const memberType = await context.prisma.memberType.findUnique({
     where: {
-      id: args.memberTypeId,
+      id,
     } });
   return memberType;
 }
 
 export async function getMemberTypeNest(args: {memberTypeId: MemberTypeId}, _,  context: { prisma: PrismaClient } ) {
+  const id = args.memberTypeId ? args.memberTypeId : MemberTypeId.BASIC;
   const memberType = await context.prisma.memberType.findUnique({
     where: {
-      id: args.memberTypeId,
+      id,
     } });
   return memberType;
 }
