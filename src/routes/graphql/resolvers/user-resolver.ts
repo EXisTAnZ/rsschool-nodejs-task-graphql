@@ -15,7 +15,7 @@ export async function getUser(args: {id: string},  context: { prisma: PrismaClie
   return user;
 }
 
-export async function getSubscriptions(args: {id: string},  context: { prisma: PrismaClient }) {
+export async function getSubscriptions(args: {id: string}, _,  context: { prisma: PrismaClient }) {
   const subscriptions = await context.prisma.user.findMany({
     where: {
       subscribedToUser: { some: { subscriberId: args.id } } 
@@ -25,7 +25,7 @@ export async function getSubscriptions(args: {id: string},  context: { prisma: P
   return subscriptions;
 }
 
-export async function getSubscribers(args: {id: string},  context: { prisma: PrismaClient }) {
+export async function getSubscribers(args: {id: string}, _, context: { prisma: PrismaClient }) {
   const subscribers = await context.prisma.user.findMany(
     { where: { userSubscribedTo: { some: { authorId: args.id } } } }
   );
