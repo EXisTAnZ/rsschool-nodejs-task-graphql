@@ -14,3 +14,12 @@ export async function getPost(args: {id: string},  context: { prisma: PrismaClie
   });
   return post;
 }
+
+export async function getUserPost(args: {id: string},  context: { prisma: PrismaClient } ) {
+  const post = await context.prisma.post.findMany({
+    where: {
+      authorId: args.id,
+    },
+  });
+  return post;
+}

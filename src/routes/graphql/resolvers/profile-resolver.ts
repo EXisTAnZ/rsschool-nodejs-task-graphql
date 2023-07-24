@@ -14,3 +14,12 @@ export async function getProfile(args: {id: string},  context: { prisma: PrismaC
   });
   return profile;
 }
+
+export async function getUserProfile(args: {id: string},  context: { prisma: PrismaClient } ) {
+  const profile = await context.prisma.profile.findUnique({
+    where: {
+      userId: args.id,
+    },
+  });
+  return profile;
+}
