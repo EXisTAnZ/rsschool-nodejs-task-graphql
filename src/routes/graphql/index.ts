@@ -1,6 +1,12 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { graphql } from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, graphql, parse, validate } from 'graphql';
+import { UUIDType } from './types/uuid.js';
+import { UserType } from './types/user.js';
+import { MemberTypeEnum, MemberTypesType } from './types/member-type.js';
+import { PostType } from './types/post.js';
+import { ProfileType } from './types/porfile.js';
+import { resolvers } from './resolvers/resolvers.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.route({
@@ -13,7 +19,63 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
       },
     },
     async handler(req) {
-      return {};
+
+      const { prisma } = fastify;
+      const query = new GraphQLObjectType({
+        name: "Query",
+        fields: {
+          user: {
+            type: UserType as GraphQLObjectType,
+            args: {
+              id: { type: new GraphQLNonNull(UUIDType) },
+            },
+          },
+          users: {
+            type: new GraphQLList(UserType),
+          },
+          memberType: {
+            type: MemberTypesType,
+            args: {
+              id: { type: new GraphQLNonNull(MemberTypeEnum) },
+            },
+          },
+          memberTypes: {
+            type: new GraphQLList(MemberTypesType),
+          },
+          post: {
+            type: PostType,
+            args: {
+              id: { type: new GraphQLNonNull(UUIDType) },
+            },
+          },
+          posts: {
+            type: new GraphQLList(PostType),
+          },
+          profile: {
+            type: ProfileType,
+            args: {
+              id: { type: new GraphQLNonNull(UUIDType) },
+            },
+          },
+          profiles: {
+            type: new GraphQLList(ProfileType),
+          },
+        },
+      });
+      const schema = new GraphQLSchema({ query });
+      const errors = validate(schema, parse(req.body.query));
+
+      // if (errors.length > 0) {
+      //   return { errors };
+      // };
+      const res = await graphql({
+        schema,
+        variableValues: req.body.variables,
+        source: req.body.query,
+        rootValue: resolvers,
+        contextValue: { prisma },
+      })
+      return res;
     },
   });
 };
