@@ -3,7 +3,7 @@ import { UUIDType } from "./uuid.js";
 import { PostType } from "./post.js";
 import { ProfileType } from "./porfile.js";
 import { getUserProfile } from "../resolvers/profile-resolver.js";
-import { getPosts } from "../resolvers/post-resolver.js";
+import { getUserPosts } from "../resolvers/post-resolver.js";
 import { getSubscribers, getSubscriptions } from "../resolvers/user-resolver.js";
 
 export const UserType = new GraphQLObjectType({
@@ -18,7 +18,7 @@ export const UserType = new GraphQLObjectType({
     },
     posts: {
       type: new GraphQLList(PostType),
-      resolve: getPosts,
+      resolve: getUserPosts,
     },
     userSubscribedTo: {
       type: new GraphQLList(UserType),
