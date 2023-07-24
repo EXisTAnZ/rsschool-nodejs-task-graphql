@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client";
+import { MemberTypeId } from "../../member-types/schemas.js";
 
 export async function getMemberTypes(args, context: { prisma: PrismaClient } ) {
   const memberTypes = await context.prisma.memberType.findMany();
   return memberTypes;
 }
 
-export async function getMemberType(args: {memberTypeId: string},  context: { prisma: PrismaClient } ) {
+export async function getMemberType(args: {memberTypeId: MemberTypeId},  context: { prisma: PrismaClient } ) {
   const memberType = await context.prisma.memberType.findUnique({
     where: {
       id: args.memberTypeId,
@@ -13,7 +14,7 @@ export async function getMemberType(args: {memberTypeId: string},  context: { pr
   return memberType;
 }
 
-export async function getMemberTypeNest(args: {memberTypeId: string}, _,  context: { prisma: PrismaClient } ) {
+export async function getMemberTypeNest(args: {memberTypeId: MemberTypeId}, _,  context: { prisma: PrismaClient } ) {
   const memberType = await context.prisma.memberType.findUnique({
     where: {
       id: args.memberTypeId,
