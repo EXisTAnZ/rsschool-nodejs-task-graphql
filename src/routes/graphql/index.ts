@@ -1,9 +1,9 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString, graphql, parse, validate } from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, graphql, parse, validate } from 'graphql';
 import { UUIDType } from './types/uuid.js';
 import { UserType } from './types/user.js';
-import { MemberTypesType } from './types/member-type.js';
+import { MemberTypeEnum, MemberTypesType } from './types/member-type.js';
 import { PostType } from './types/post.js';
 import { ProfileType } from './types/porfile.js';
 import { resolvers } from './resolvers/resolvers.js';
@@ -25,7 +25,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         name: "Query",
         fields: {
           user: {
-            type: UserType,
+            type: UserType as GraphQLObjectType,
             args: {
               id: { type: new GraphQLNonNull(UUIDType) },
             },
@@ -36,7 +36,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           memberType: {
             type: MemberTypesType,
             args: {
-              id: { type: new GraphQLNonNull(GraphQLString) },
+              id: { type: new GraphQLNonNull(MemberTypeEnum) },
             },
           },
           memberTypes: {
