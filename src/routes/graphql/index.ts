@@ -6,7 +6,7 @@ import { UserType } from './types/user.js';
 import { MemberTypesType } from './types/member-type.js';
 import { PostType } from './types/post.js';
 import { ProfileType } from './types/porfile.js';
-import { resolvers } from './resolvers/index.js';
+import { resolvers } from './resolvers/resolvers.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
   fastify.route({
